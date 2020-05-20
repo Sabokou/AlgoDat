@@ -47,12 +47,10 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(16)
         self.radioButton.setFont(font)
-        self.radioButton.setStyleSheet("background-color: rgb(170, 255, 255);")
         self.radioButton.setObjectName("radioButton")
         self.verticalLayout.addWidget(self.radioButton)
         self.radioButton_2 = QtWidgets.QRadioButton(self.centralwidget)
-        self.radioButton_2.setStyleSheet("font: 16pt \"MS Shell Dlg 2\";\n"
-"background-color: rgb(170, 255, 255);")
+        self.radioButton_2.setStyleSheet("font: 16pt \"MS Shell Dlg 2\";")
         self.radioButton_2.setObjectName("radioButton_2")
         self.verticalLayout.addWidget(self.radioButton_2)
         self.line_2 = QtWidgets.QFrame(self.centralwidget)
