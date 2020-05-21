@@ -87,13 +87,14 @@ def ShowPlot(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
     
 
 
-koordinatenliste = ErstelleKoordiantenliste()
-verbindungsliste = ErstelleVerbindungsliste(koordinatenliste)
-knotenzahl = 8
-startkoordinate = randint(0,knotenzahl)
-endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
+if __name__ == "__main__":
+    koordinatenliste = ErstelleKoordiantenliste()
+    verbindungsliste = ErstelleVerbindungsliste(koordinatenliste)
+    knotenzahl = 8
+    startkoordinate = randint(0,knotenzahl)
+    endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
 
-weg, distanz = dijkstra(verbindungsliste,startkoordinate, endkoordinate)
-print(weg)
-print ("Distance:",distanz)
-ShowPlot(koordinatenliste, verbindungsliste, weg, knotenzahl=8) 
+    weg, distanz = dijkstra(verbindungsliste,startkoordinate, endkoordinate)
+    print(weg)
+    print ("Distance:",distanz)
+    ShowPlot(koordinatenliste, verbindungsliste, weg, knotenzahl=8) 
