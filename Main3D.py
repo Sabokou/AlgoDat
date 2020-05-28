@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import functools
 from random import randint, choice
 from math import sqrt
+from mpl_toolkits.mplot3d import Axes3D
 
 def dijkstra(verbindungsliste,start,ende):
     distanz = dict()
@@ -30,21 +31,21 @@ def dijkstra(verbindungsliste,start,ende):
     weg.reverse()
     return weg, distanz[ende]
 
-def Pythagoras(Punkt1, Punkt2):
-    distanz = round(sqrt(((Punkt1[0]-Punkt2[0])**2 + (Punkt1[1] - Punkt2[1])**2)))
+def Pythagoras3D(Punkt1, Punkt2):
+    distanz = round(sqrt(((Punkt1[0]-Punkt2[0])**2 + (Punkt1[1] - Punkt2[1])**2+ (Punkt1[2] - Punkt2[2])**2)))
     if distanz == 0:
         return 1
     else:
         return distanz
 
-def ErstelleKoordiantenliste(knotenzahl = 8):
+def ErstelleKoordinatenliste3D(knotenzahl = 8):
     koordinatenliste = dict()
     for i in range(knotenzahl):
-        koordinatenliste[i] = [randint(1, 5*knotenzahl), randint(1, 5*knotenzahl)]
+        koordinatenliste[i] = [randint(1, 5*knotenzahl), randint(1, 5*knotenzahl), randint(1, 5*knotenzahl)]
     print(koordinatenliste)
     return koordinatenliste
 
-def ErstelleVerbindungsliste(koordinatenliste, knotenzahl = 8):
+def ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl = 8):
     verbindungsliste = dict()
     for i in koordinatenliste.keys():
         verbindungsliste[i] = list()
@@ -57,39 +58,37 @@ def ErstelleVerbindungsliste(koordinatenliste, knotenzahl = 8):
         for j in range(k):
             verbindung = choice([n for n in range(knotenzahl) if (n != i) and (n not in genutzteverbindungsliste)])
             genutzteverbindungsliste.append(verbindung)
-            distanz = Pythagoras(koordinatenliste[i], koordinatenliste[verbindung])
+            distanz = Pythagoras3D(koordinatenliste[i], koordinatenliste[verbindung])
             verbindungsliste[i] = verbindungsliste[i] + [(verbindung, distanz)]
             verbindungsliste[verbindung] = verbindungsliste[verbindung] + [(i, distanz)]
     print(verbindungsliste)
     return verbindungsliste
 
-def connectpoints(x,y,p1,p2):
+def connectpoints3D(x,y,z,p1,p2):
     x1, x2 = x[p1], x[p2]
     y1, y2 = y[p1], y[p2]
-    plt.plot([x1,x2],[y1,y2],':ko')
+    z1, z2 = z[p1], z[p2]
+    ax.plot([x1,x2],[y1,y2],[z1, z2], ':ko')
 
-def ShowPlot(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
+def ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
     xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
     yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
+    zCoord=[koordinatenliste[k][2] for k in sorted(koordinatenliste)]
 
     for i in verbindungsliste.keys():
         for n in range(len(verbindungsliste[i])):
-            connectpoints(xCoord, yCoord, i, verbindungsliste[i][n][0])
-
-    plt.axis([-1, knotenzahl * 5 + 1, -1, knotenzahl * 5 + 1])
+            connectpoints3D(xCoord, yCoord, zCoord, i, verbindungsliste[i][n][0])
 
     for i in range(knotenzahl):
-        plt.text(xCoord[i]-0.5, yCoord[i], str(i))
+        ax.text(xCoord[i]-0.5, yCoord[i], zCoord[i], str(i))
 
-    plt.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg], '-r')
+    ax.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg],[koordinatenliste[n][2] for n in weg], '-r')
 
     plt.show()
     
-
-
-if __name__ == "__main__":
-    koordinatenliste = ErstelleKoordiantenliste()
-    verbindungsliste = ErstelleVerbindungsliste(koordinatenliste)
+def Funktionsaufruf3D():
+    koordinatenliste = ErstelleKoordinatenliste3D()
+    verbindungsliste = ErstelleVerbindungsliste3D(koordinatenliste)
     knotenzahl = 8
     startkoordinate = randint(0,knotenzahl)
     endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
@@ -97,4 +96,9 @@ if __name__ == "__main__":
     weg, distanz = dijkstra(verbindungsliste,startkoordinate, endkoordinate)
     print(weg)
     print ("Distance:",distanz)
-    ShowPlot(koordinatenliste, verbindungsliste, weg, knotenzahl=8) 
+    ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl=8) 
+
+if __name__ == "__main__":
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    Funktionsaufruf3D()

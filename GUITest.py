@@ -16,6 +16,10 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
 
+
+
+
+
 #Nötige Funktionen für Dijkstra Algorithmus definieren
 
 ## Definition des reinen Dijkstra Algorithmus
@@ -173,6 +177,7 @@ def Funktionsaufruf2D():
     print(weg)
     print ("Distance:",distanz)
     ShowPlot2D(koordinatenliste, verbindungsliste, weg, knotenzahl=8)
+    return koordinatenliste, verbindungsliste, weg, knotenzahl, startkoordinate, endkoordinate, distanz
 def Funktionsaufruf3D():
     koordinatenliste = ErstelleKoordinatenliste3D()
     verbindungsliste = ErstelleVerbindungsliste3D(koordinatenliste)
@@ -185,10 +190,16 @@ def Funktionsaufruf3D():
     print ("Distance:",distanz)
     ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl=8) 
 
+koordinatenliste = ErstelleKoordiantenliste2D()
+verbindungsliste = ErstelleVerbindungsliste2D(koordinatenliste)
+knotenzahl = 8
+startkoordinate = randint(0,knotenzahl)
+endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
 
-
-
-
+weg, distanz = dijkstra(verbindungsliste,startkoordinate, endkoordinate)
+print(weg)
+print ("Distance:",distanz)
+ShowPlot2D(koordinatenliste, verbindungsliste, weg, knotenzahl=8)
 
 # Integration unseres Plotes in die GUI
 
@@ -208,16 +219,6 @@ class Canvas2D(FigureCanvas):
     def plot2D(self):
         axe = self.figure.add_subplot(111)
 
-        koordinatenliste = ErstelleKoordiantenliste2D()
-        verbindungsliste = ErstelleVerbindungsliste2D(koordinatenliste)
-        knotenzahl = 8
-        startkoordinate = randint(0,knotenzahl)
-        endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
-
-        weg, distanz = dijkstra(verbindungsliste,startkoordinate, endkoordinate)
-        print(weg)
-        print ("Distance:",distanz)
-
         xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
         yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
 
@@ -228,6 +229,8 @@ class Canvas2D(FigureCanvas):
                 axe.plot([x1,x2],[y1,y2],':ko')
         axe.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg], '-r')
 
+        axe.axis([-1, knotenzahl * 5 + 1, -1, knotenzahl * 5 + 1])
+
         for i in range(knotenzahl):
             axe.text(xCoord[i]-0.5, yCoord[i], str(i))
 
@@ -235,50 +238,40 @@ class Canvas2D(FigureCanvas):
         axe.set_title("Dijkstra")
         axe.set_xlabel(xlabel)
 
-class Canvas3D(FigureCanvas):
-    def __init__(self, parent = None, width = 5, height = 5, dpi = 100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(1,1,1)
- 
-        FigureCanvas.__init__(self, fig)
-        self.setParent(parent)
+#class Canvas3D(FigureCanvas):
+#    def __init__(self, parent = None, width = 5, height = 5, dpi = 100):
+#        fig = Figure(figsize=(width, height), dpi=dpi)
+#        self.axes = fig.add_subplot(1,1,1)
+# 
+#        FigureCanvas.__init__(self, fig)
+#        self.setParent(parent)
 
         
-        self.plot3D()
+#        self.plot3D()
         
  
-    def plot3D(self):
-        ax2 = self.figure.add_subplot(111, projection='3d')
+## Neudefintion der obrigen ShowPlot - Funktion 
+#    def plot3D(self):
+#        ax2 = self.figure.add_subplot(111)
 
-        koordinatenliste = ErstelleKoordinatenliste3D()
-        verbindungsliste = ErstelleVerbindungsliste3D(koordinatenliste)
-        knotenzahl = 8
-        startkoordinate = randint(0,knotenzahl)
-        endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
+#        xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
+#        yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
 
-        weg, distanz = dijkstra(verbindungsliste,startkoordinate, endkoordinate)
-        print(weg)
-        print ("Distance:",distanz)
+#        for i in verbindungsliste.keys():
+#            for n in range(len(verbindungsliste[i])):
+#                x1, x2 = xCoord[i], xCoord[verbindungsliste[i][n][0]]
+#                y1, y2 = yCoord[i], yCoord[verbindungsliste[i][n][0]]
+#                ax2.plot([x1,x2],[y1,y2],':ko')
+#        ax2.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg], '-r')
 
-        xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
-        yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
-        zCoord=[koordinatenliste[k][2] for k in sorted(koordinatenliste)]
+#        ax2.axis([-1, knotenzahl * 5 + 1, -1, knotenzahl * 5 + 1])
 
-        for i in verbindungsliste.keys():
-            for n in range(len(verbindungsliste[i])):
-                x1, x2 = xCoord[i], xCoord[verbindungsliste[i][n][0]]
-                y1, y2 = yCoord[i], yCoord[verbindungsliste[i][n][0]]
-                z1, z2 = zCoord[i], zCoord[verbindungsliste[i][n][0]]
-                ax2.plot([x1,x2],[y1,y2],[z1,z2],':ko')
-        ax2.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg],[koordinatenliste[n][2] for n in weg], '-r')
+#        for i in range(knotenzahl):
+#            ax2.text(xCoord[i]-0.5, yCoord[i], str(i))
 
-
-        for i in range(knotenzahl):
-            ax2.text(xCoord[i]-0.5, yCoord[i], zCoord[i], str(i))
-
-        xlabel = "Startknoten: "+ str(startkoordinate) + ", Endknoten: "+ str(endkoordinate) + ", Weg: "+ str(weg)+ ", Distanz: "+ str(distanz)
-        ax2.set_title("Dijkstra")
-        ax2.set_xlabel(xlabel)
+#        xlabel = "Startknoten: "+ str(startkoordinate) + ", Endknoten: "+ str(endkoordinate) + ", Weg: "+ str(weg)+ ", Distanz: "+ str(distanz)
+#        ax2.set_title("Dijkstra")
+#        ax2.set_xlabel(xlabel)
 
 
 # Allgemeiner Code für den GUI - AUfbau 
@@ -361,9 +354,9 @@ class Ui_MainWindow(object):
         if self.radioButton.isChecked() == True:
             self.widget1 = Canvas2D(self.splitter, width=8, height=4)
             self.widget1.setObjectName("widget1")
-        else:
-            self.widget2 = Canvas3D(self.splitter, width=8, height=4)
-            self.widget2.setObjectName("widget2")
+#        else:
+#            self.widget2 = Canvas3D(self.splitter, width=8, height=4)
+#            self.widget2.setObjectName("widget2")
         
         self.horizontalLayout.addWidget(self.splitter)
         self.horizontalLayout_3.addLayout(self.horizontalLayout)
