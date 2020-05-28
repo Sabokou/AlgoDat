@@ -1,11 +1,25 @@
-# -*- coding: utf-8 -*-
-
-#---------Imports-------- 
+# Imports für die Grundfunktionen des Dijkstra Algorithmus
 import matplotlib.pyplot as plt
 import functools
 from random import randint, choice
 from math import sqrt
 
+#Imports für die GUI
+import sys
+import matplotlib
+matplotlib.use('Qt5Agg')
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMainWindow
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+import numpy as np
+
+import Main
+
+#Nötige Funktionen für Dijkstra Algorithmus definieren
+
+## Definition des reinen Dijkstra Algorithmus
 def dijkstra(verbindungsliste,start,ende):
     distanz = dict()
     herkunftsliste = dict()
@@ -32,6 +46,8 @@ def dijkstra(verbindungsliste,start,ende):
     weg.reverse()
     return weg, distanz[ende]
 
+## Definition der Hilfsfunktion Pythagoras -> diese errechnet die Distanz zwischen 2 Knotenpunkten
+###Die Funktion wird in der Funktion ErstelleVerbindgungsliste genutzt
 def Pythagoras(Punkt1, Punkt2):
     distanz = round(sqrt(((Punkt1[0]-Punkt2[0])**2 + (Punkt1[1] - Punkt2[1])**2)))
     if distanz == 0:
@@ -39,6 +55,7 @@ def Pythagoras(Punkt1, Punkt2):
     else:
         return distanz
 
+## Definition der Funktion ErstelleKoordinatenliste -> erstellt eine Koordinatenliste mit zufälligen Knotenkoordinaten
 def ErstelleKoordiantenliste(knotenzahl = 8):
     koordinatenliste = dict()
     for i in range(knotenzahl):
@@ -46,6 +63,9 @@ def ErstelleKoordiantenliste(knotenzahl = 8):
     print(koordinatenliste)
     return koordinatenliste
 
+## Definition der Funktion ErstelleVerbindungsliste 
+### nutzt die erstellte Koordinatenliste, um die entsprechenden Kanten zwischen den Knoten zufällig zu generieren
+### ruft dabei die oben definierte Hilfsfunktion Pythagoras auf 
 def ErstelleVerbindungsliste(koordinatenliste, knotenzahl = 8):
     verbindungsliste = dict()
     for i in koordinatenliste.keys():
@@ -65,12 +85,17 @@ def ErstelleVerbindungsliste(koordinatenliste, knotenzahl = 8):
     print(verbindungsliste)
     return verbindungsliste
 
+## Definition der Hilfsfunktion connectpoint für die Funktion ShowPlot
+### Zeichnet die Kanten zwischen den einzelnen Knoten
 def connectpoints(x,y,p1,p2):
     x1, x2 = x[p1], x[p2]
     y1, y2 = y[p1], y[p2]
-    return x1, x2, y1,y2
-   #plt.plot([x1,x2],[y1,y2],':ko')
+    plt.plot([x1,x2],[y1,y2],':ko')
 
+
+## Definition der Funktion ShowPlot
+### nutzt die Hilfsfunktion connectpoints
+### zeichnet den kompletten Graphen
 def ShowPlot(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
     xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
     yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
@@ -83,15 +108,17 @@ def ShowPlot(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
 
     for i in range(knotenzahl):
         plt.text(xCoord[i]-0.5, yCoord[i], str(i))
-    
-    return x1, x2, y1, y2
 
-    #plt.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg], '-r')
+    plt.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg], '-r')
 
-    #plt.show()
+    plt.show()
     
 
-
+# Funktionsaufrufe
+## Koordinatenliste und Verbindungsliste zufällig generieren lassen
+## Start- und Endkoordinate zufällig generieren lassen
+## per dijkstra Funktion kürzesten Weg und Distanz berechnen
+## Die Showplot - Funktion ist hier auskommentiert, da sie in diesem Fall innerhalb der GUI aufgerufen werden muss
 koordinatenliste = ErstelleKoordiantenliste()
 verbindungsliste = ErstelleVerbindungsliste(koordinatenliste)
 knotenzahl = 8
@@ -104,21 +131,8 @@ print ("Distance:",distanz)
 #ShowPlot(koordinatenliste, verbindungsliste, weg, knotenzahl=8) 
 
 
-xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
-yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
 
-
-import sys
-import matplotlib
-matplotlib.use('Qt5Agg')
-
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMainWindow
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
-import numpy as np
-
-import Main
+# Integration unseres Plotes in die GUI
 
 class Canvas(FigureCanvas):
     def __init__(self, parent = None, width = 5, height = 5, dpi = 100):
@@ -130,9 +144,13 @@ class Canvas(FigureCanvas):
  
         self.plot()
  
- 
+## Neudefintion der obrigen ShowPlot - Funktion 
     def plot(self):
         ax = self.figure.add_subplot(111)
+
+        xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
+        yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
+
         for i in verbindungsliste.keys():
             for n in range(len(verbindungsliste[i])):
                 x1, x2 = xCoord[i], xCoord[verbindungsliste[i][n][0]]
@@ -140,6 +158,17 @@ class Canvas(FigureCanvas):
                 ax.plot([x1,x2],[y1,y2],':ko')
         ax.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg], '-r')
 
+        ax.axis([-1, knotenzahl * 5 + 1, -1, knotenzahl * 5 + 1])
+
+        for i in range(knotenzahl):
+            ax.text(xCoord[i]-0.5, yCoord[i], str(i))
+
+        xlabel = "Startknoten: "+ str(startkoordinate) + ", Endknoten: "+ str(endkoordinate) + ", Weg: "+ str(weg)+ ", Distanz: "+ str(distanz)
+        ax.set_title("Dijkstra")
+        ax.set_xlabel(xlabel)
+
+# Allgemeiner Code für den GUI - AUfbau 
+## automatisch generiert
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
