@@ -1,3 +1,4 @@
+#region Imports
 # Imports für die Grundfunktionen des Dijkstra Algorithmus
 import matplotlib.pyplot as plt
 import functools
@@ -15,9 +16,11 @@ from PyQt5.QtWidgets import QMainWindow
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
+#endregion
 
 #Nötige Funktionen für Dijkstra Algorithmus definieren
 
+#region Dijkstra-Algorithmus
 ## Definition des reinen Dijkstra Algorithmus
 def dijkstra(verbindungsliste,start,ende):
     distanz = dict()
@@ -44,7 +47,9 @@ def dijkstra(verbindungsliste,start,ende):
         temporaer = herkunftsliste[temporaer]
     weg.reverse()
     return weg, distanz[ende]
+#endregion
 
+#region Berechnung der Kantenlängen
 ## Definition der Hilfsfunktion Pythagoras -> diese errechnet die Distanz zwischen 2 Knotenpunkten
 ###Die Funktion wird in der Funktion ErstelleVerbindgungsliste genutzt
 def Pythagoras2D(Punkt1, Punkt2):
@@ -59,7 +64,9 @@ def Pythagoras3D(Punkt1, Punkt2):
         return 1
     else:
         return distanz
+#endregion
 
+#region Erstellung der Koordinaten
 ## Definition der Funktion ErstelleKoordinatenliste -> erstellt eine Koordinatenliste mit zufälligen Knotenkoordinaten
 def ErstelleKoordiantenliste2D(knotenzahl = 8):
     koordinatenliste = dict()
@@ -73,7 +80,9 @@ def ErstelleKoordinatenliste3D(knotenzahl = 8):
         koordinatenliste[i] = [randint(1, 5*knotenzahl), randint(1, 5*knotenzahl), randint(1, 5*knotenzahl)]
     print(koordinatenliste)
     return koordinatenliste
+#endregion
 
+#region Erstellung der Kantenlisten
 ## Definition der Funktion ErstelleVerbindungsliste 
 ### nutzt die erstellte Koordinatenliste, um die entsprechenden Kanten zwischen den Knoten zufällig zu generieren
 ### ruft dabei die oben definierte Hilfsfunktion Pythagoras auf 
@@ -113,7 +122,9 @@ def ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl = 8):
             verbindungsliste[verbindung] = verbindungsliste[verbindung] + [(i, distanz)]
     print(verbindungsliste)
     return verbindungsliste
+#endregion
 
+#region Connectpoints
 ## Definition der Hilfsfunktion connectpoint für die Funktion ShowPlot
 ### Zeichnet die Kanten zwischen den einzelnen Knoten
 def connectpoints2D(x,y,p1,p2):
@@ -125,7 +136,9 @@ def connectpoints3D(x,y,z,p1,p2):
     y1, y2 = y[p1], y[p2]
     z1, z2 = z[p1], z[p2]
     ax.plot([x1,x2],[y1,y2],[z1, z2], ':ko')
+#endregion
 
+#region Plot-Funktionen
 ## Definition der Funktion ShowPlot
 ### nutzt die Hilfsfunktion connectpoints
 ### zeichnet den kompletten Graphen
@@ -145,6 +158,7 @@ def ShowPlot2D(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
     plt.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg], '-r')
 
     plt.show()
+
 def ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
     xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
     yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
@@ -160,7 +174,9 @@ def ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
     ax.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg],[koordinatenliste[n][2] for n in weg], '-r')
 
     plt.show()    
+#endregion
 
+#region Hilfsfunktionen
 # Funktionsaufrufe
 def Funktionsaufruf2D():
     koordinatenliste = ErstelleKoordiantenliste2D()
@@ -184,14 +200,10 @@ def Funktionsaufruf3D():
     print(weg)
     print ("Distance:",distanz)
     ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl=8) 
+#endregion
 
-
-
-
-
-
+#region Plot-Klasse für GUI
 # Integration unseres Plotes in die GUI
-
 class Canvas2D(FigureCanvas):
     def __init__(self, parent = None, width = 5, height = 5, dpi = 100):
         fig = Figure(figsize=(width, height), dpi=dpi)
@@ -279,8 +291,9 @@ class Canvas3D(FigureCanvas):
         xlabel = "Startknoten: "+ str(startkoordinate) + ", Endknoten: "+ str(endkoordinate) + ", Weg: "+ str(weg)+ ", Distanz: "+ str(distanz)
         ax2.set_title("Dijkstra")
         ax2.set_xlabel(xlabel)
+#endregion
 
-
+#region GUI
 # Allgemeiner Code für den GUI - AUfbau 
 ## automatisch generiert
 class Ui_MainWindow(object):
@@ -384,9 +397,9 @@ class Ui_MainWindow(object):
         self.radioButton_2.setText(_translate("MainWindow", "3D"))
         self.label_3.setText(_translate("MainWindow", "Anzahl an Knoten:"))
         self.pushButton.setText(_translate("MainWindow", "Graph generieren"))
+#endregion
 
-
-
+#region Main-Call
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -395,5 +408,4 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
-         
+#endregion
