@@ -148,7 +148,7 @@ class CanvasLeer(FigureCanvas):
 
 
 class Canvas2D(FigureCanvas):
-    def __init__(self, knotenzahl=8, parent = None, width = 5, height = 5, dpi = 100):
+    def __init__(self, parent = None, width = 5, height = 5, dpi = 100, knotenzahl=8):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(1,1,1)
  
@@ -191,7 +191,7 @@ class Canvas2D(FigureCanvas):
         axe.set_xlabel(xlabel)
 
 class Canvas3D(FigureCanvas):
-    def __init__(self, knotenzahl=8, parent = None, width = 5, height = 5, dpi = 100):
+    def __init__(self, parent = None, width = 5, height = 5, dpi = 100, knotenzahl=8):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(1,1,1)
  
@@ -324,6 +324,7 @@ class Ui_MainWindow(object):
         self.lineEdit.setMaxLength(5)
         self.lineEdit.setFrame(True)
         self.lineEdit.setObjectName("lineEdit")
+        self.lineEdit.setText("8")
         
         self.verticalLayout.addWidget(self.lineEdit)
         
@@ -336,10 +337,11 @@ class Ui_MainWindow(object):
         
         self.pushButton = QtWidgets.QPushButton(self.widget)
         self.pushButton.setObjectName("pushButton")
+        self.pushButton.clicked.connect(self.button_clicked)
         
         self.verticalLayout.addWidget(self.pushButton)
         
-        self.radioButton.setChecked(False)
+        self.radioButton.setChecked(True)
         
         self.widget0 = CanvasLeer(self.splitter, width=8, height=4)
         self.widget0.setObjectName("widget0")
@@ -359,10 +361,10 @@ class Ui_MainWindow(object):
 
     def button_clicked(self):
         if self.radioButton.isChecked() == True:
-            self.widget1 = Canvas2D(self.splitter, width=8, height=4)
+            self.widget1 = Canvas2D(self.splitter, width=8, height=4, knotenzahl=int(self.lineEdit.text()))
             self.widget1.setObjectName("widget1")
         else:
-            self.widget2 = Canvas3D(self.splitter, width=8, height=4)
+            self.widget2 = Canvas3D(self.splitter, width=8, height=4, knotenzahl=int(self.lineEdit.text()))
             self.widget2.setObjectName("widget2")
 
     def retranslateUi(self, MainWindow):
