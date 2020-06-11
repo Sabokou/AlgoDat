@@ -19,7 +19,6 @@ import numpy as np
 #endregion
 
 #Nötige Funktionen für Dijkstra Algorithmus definieren
-
 #region Dijkstra-Algorithmus
 ## Definition des reinen Dijkstra Algorithmus
 def dijkstra(verbindungsliste,start,ende):
@@ -163,7 +162,7 @@ class Canvas2D(FigureCanvas):
     def plot2D(self, knotenzahl):
         axe = self.figure.add_subplot(111)
 
-        koordinatenliste = ErstelleKoordiantenliste2D()
+        koordinatenliste = ErstelleKoordiantenliste2D(knotenzahl)
         verbindungsliste = ErstelleVerbindungsliste2D(koordinatenliste)
         startkoordinate = randint(0,knotenzahl)
         endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
@@ -186,8 +185,8 @@ class Canvas2D(FigureCanvas):
             axe.text(xCoord[i]-0.5, yCoord[i], str(i))
 
         xlabel = "Startknoten: "+ str(startkoordinate) + ", Endknoten: "+ str(endkoordinate) + ", Weg: "+ str(weg)+ ", Distanz: "+ str(distanz)
-        axe.set_title("Dijkstra")
-        axe.set_xlabel(xlabel)
+        axe.set_title("Dijkstra\n" + xlabel)
+        #axe.set_xlabel(xlabel)
 
 class Canvas3D(FigureCanvas):
     def __init__(self, parent = None, width = 5, height = 5, dpi = 100, knotenzahl=8):
@@ -204,7 +203,7 @@ class Canvas3D(FigureCanvas):
     def plot3D(self, knotenzahl):
         ax2 = self.figure.add_subplot(111, projection='3d')
 
-        koordinatenliste = ErstelleKoordinatenliste3D()
+        koordinatenliste = ErstelleKoordinatenliste3D(knotenzahl)
         verbindungsliste = ErstelleVerbindungsliste3D(koordinatenliste)
         startkoordinate = randint(0,knotenzahl)
         endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
@@ -230,8 +229,8 @@ class Canvas3D(FigureCanvas):
             ax2.text(xCoord[i]-0.5, yCoord[i], zCoord[i], str(i))
 
         xlabel = "Startknoten: "+ str(startkoordinate) + ", Endknoten: "+ str(endkoordinate) + ", Weg: "+ str(weg)+ ", Distanz: "+ str(distanz)
-        ax2.set_title("Dijkstra")
-        ax2.set_xlabel(xlabel)
+        ax2.set_title("Dijkstra\n" + xlabel)
+        #ax2.set_xlabel(xlabel)
 #endregion
 
 #region GUI
