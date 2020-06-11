@@ -128,8 +128,27 @@ def ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl = 8):
 
 #region Plot-Klasse für GUI
 # Integration unseres Plotes in die GUI
+
+class CanvasLeer(FigureCanvas):
+    def __init__(self, parent = None, width = 5, height = 5, dpi = 100):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = fig.add_subplot(1,1,1)
+ 
+        FigureCanvas.__init__(self, fig)
+        self.setParent(parent)
+
+        
+        self.plotLeer()   #to be removed
+        
+ 
+## Neudefintion der obrigen ShowPlot - Funktion 
+    def plotLeer(self):
+        ax = self.figure.add_subplot(111)
+        ax.plot()
+
+
 class Canvas2D(FigureCanvas):
-    def __init__(self, knotenzahl, parent = None, width = 5, height = 5, dpi = 100):
+    def __init__(self, knotenzahl=8, parent = None, width = 5, height = 5, dpi = 100):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(1,1,1)
  
@@ -172,7 +191,7 @@ class Canvas2D(FigureCanvas):
         axe.set_xlabel(xlabel)
 
 class Canvas3D(FigureCanvas):
-    def __init__(self, knotenzahl, parent = None, width = 5, height = 5, dpi = 100):
+    def __init__(self, knotenzahl=8, parent = None, width = 5, height = 5, dpi = 100):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(1,1,1)
  
@@ -180,7 +199,7 @@ class Canvas3D(FigureCanvas):
         self.setParent(parent)
 
         
-        self.plot3D()    #to be removed
+        self.plot3D(knotenzahl)    #to be removed
         
  
     def plot3D(self, knotenzahl):
@@ -320,16 +339,11 @@ class Ui_MainWindow(object):
         
         self.verticalLayout.addWidget(self.pushButton)
         
-        self.radioButton.setChecked(True)
+        self.radioButton.setChecked(False)
         
-        """ HIER DIE FUNKTION FÜR DEN LEEREN GRAPHEN"""
-        # if self.radioButton.isChecked() == True:
-        #     self.widget1 = Canvas2D(self.splitter, width=8, height=4)
-        #     self.widget1.setObjectName("widget1")
-        # else:
-        #     self.widget2 = Canvas3D(self.splitter, width=8, height=4)
-        #     self.widget2.setObjectName("widget2")
-        
+        self.widget0 = CanvasLeer(self.splitter, width=8, height=4)
+        self.widget0.setObjectName("widget0")
+
         self.horizontalLayout.addWidget(self.splitter)
         self.horizontalLayout_3.addLayout(self.horizontalLayout)
         
