@@ -165,7 +165,6 @@ class Canvas2D(FigureCanvas):
 
         koordinatenliste = ErstelleKoordiantenliste2D()
         verbindungsliste = ErstelleVerbindungsliste2D(koordinatenliste)
-        knotenzahl = 8
         startkoordinate = randint(0,knotenzahl)
         endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
 
@@ -207,7 +206,6 @@ class Canvas3D(FigureCanvas):
 
         koordinatenliste = ErstelleKoordinatenliste3D()
         verbindungsliste = ErstelleVerbindungsliste3D(koordinatenliste)
-        knotenzahl = 8
         startkoordinate = randint(0,knotenzahl)
         endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
 
@@ -359,7 +357,23 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+    def deletePriorWidgets(self):
+        try:
+            self.widget0.setParent(None)
+        except:
+            pass
+
+        try:
+            self.widget1.setParent(None)
+        except:
+            pass
+        
+        try:          
+            self.widget2.setParent(None)
+        except:
+            pass
     def button_clicked(self):
+        self.deletePriorWidgets()
         if self.radioButton.isChecked() == True:
             self.widget1 = Canvas2D(self.splitter, width=8, height=4, knotenzahl=int(self.lineEdit.text()))
             self.widget1.setObjectName("widget1")
