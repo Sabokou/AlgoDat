@@ -74,6 +74,7 @@ def ErstelleKoordiantenliste2D(knotenzahl = 8):
         koordinatenliste[i] = [randint(1, 5*knotenzahl), randint(1, 5*knotenzahl)]
     print(koordinatenliste)
     return koordinatenliste
+
 def ErstelleKoordinatenliste3D(knotenzahl = 8):
     koordinatenliste = dict()
     for i in range(knotenzahl):
@@ -104,6 +105,7 @@ def ErstelleVerbindungsliste2D(koordinatenliste, knotenzahl = 8):
             verbindungsliste[verbindung] = verbindungsliste[verbindung] + [(i, distanz)]
     print(verbindungsliste)
     return verbindungsliste
+
 def ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl = 8):
     verbindungsliste = dict()
     for i in koordinatenliste.keys():
@@ -153,7 +155,7 @@ def ShowPlot2D(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
     plt.axis([-1, knotenzahl * 5 + 1, -1, knotenzahl * 5 + 1])
 
     for i in range(knotenzahl):
-        plt.text(xCoord[i]-0.5, yCoord[i], str(i))
+        plt.text(xCoord[i]-0.8, yCoord[i], str(i))
 
     plt.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg], '-r')
 
@@ -169,7 +171,7 @@ def ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
             connectpoints3D(xCoord, yCoord, zCoord, i, verbindungsliste[i][n][0])
 
     for i in range(knotenzahl):
-        ax.text(xCoord[i]-0.5, yCoord[i], zCoord[i], str(i))
+        ax.text(xCoord[i]-0.8, yCoord[i], zCoord[i], str(i))
 
     ax.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg],[koordinatenliste[n][2] for n in weg], '-r')
 
@@ -189,6 +191,7 @@ def Funktionsaufruf2D():
     print(weg)
     print ("Distance:",distanz)
     ShowPlot2D(koordinatenliste, verbindungsliste, weg, knotenzahl=8)
+
 def Funktionsaufruf3D():
     koordinatenliste = ErstelleKoordinatenliste3D()
     verbindungsliste = ErstelleVerbindungsliste3D(koordinatenliste)
@@ -302,73 +305,100 @@ class Ui_MainWindow(object):
         MainWindow.resize(1020, 440)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
+        
         self.splitter = QtWidgets.QSplitter(self.centralwidget)
         self.splitter.setOrientation(QtCore.Qt.Horizontal)
         self.splitter.setObjectName("splitter")
+        
         self.widget = QtWidgets.QWidget(self.splitter)
         self.widget.setObjectName("widget")
+        
         self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
+        
         self.label_2 = QtWidgets.QLabel(self.widget)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
         font.setBold(True)
         font.setWeight(75)
+        
         self.label_2.setFont(font)
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")
+        
         self.verticalLayout.addWidget(self.label_2)
+        
         self.line = QtWidgets.QFrame(self.widget)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
+        
         self.verticalLayout.addWidget(self.line)
+        
         self.label_4 = QtWidgets.QLabel(self.widget)
         self.label_4.setStyleSheet("font: 75 18pt \"MS Shell Dlg 2\";")
         self.label_4.setObjectName("label_4")
+        
         self.verticalLayout.addWidget(self.label_4)
+        
         self.radioButton = QtWidgets.QRadioButton(self.widget)
         font = QtGui.QFont()
         font.setPointSize(16)
         self.radioButton.setFont(font)
         self.radioButton.setStyleSheet("")
         self.radioButton.setObjectName("radioButton")
+        
         self.verticalLayout.addWidget(self.radioButton)
+        
         self.radioButton_2 = QtWidgets.QRadioButton(self.widget)
         self.radioButton_2.setStyleSheet("font: 16pt \"MS Shell Dlg 2\";\n"
 "")
         self.radioButton_2.setObjectName("radioButton_2")
+        
         self.verticalLayout.addWidget(self.radioButton_2)
+        
         self.line_2 = QtWidgets.QFrame(self.widget)
         self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
         self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_2.setObjectName("line_2")
+        
         self.verticalLayout.addWidget(self.line_2)
+        
         self.label_3 = QtWidgets.QLabel(self.widget)
         self.label_3.setStyleSheet("font: 18pt \"MS Shell Dlg 2\";")
         self.label_3.setObjectName("label_3")
+        
         self.verticalLayout.addWidget(self.label_3)
+        
         self.lineEdit = QtWidgets.QLineEdit(self.widget)
         self.lineEdit.setInputMask("")
         self.lineEdit.setText("")
         self.lineEdit.setMaxLength(5)
         self.lineEdit.setFrame(True)
         self.lineEdit.setObjectName("lineEdit")
+        
         self.verticalLayout.addWidget(self.lineEdit)
+        
         self.line_3 = QtWidgets.QFrame(self.widget)
         self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
         self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_3.setObjectName("line_3")
+        
         self.verticalLayout.addWidget(self.line_3)
+        
         self.pushButton = QtWidgets.QPushButton(self.widget)
         self.pushButton.setObjectName("pushButton")
+        
         self.verticalLayout.addWidget(self.pushButton)
+        
         self.radioButton.setChecked(True)
         
         if self.radioButton.isChecked() == True:
@@ -380,13 +410,17 @@ class Ui_MainWindow(object):
         
         self.horizontalLayout.addWidget(self.splitter)
         self.horizontalLayout_3.addLayout(self.horizontalLayout)
+        
         MainWindow.setCentralWidget(self.centralwidget)
+        
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
+        
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -400,12 +434,12 @@ class Ui_MainWindow(object):
 #endregion
 
 #region Main-Call
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+#if __name__ == "__main__":
+import sys
+app = QtWidgets.QApplication(sys.argv)
+MainWindow = QtWidgets.QMainWindow()
+ui = Ui_MainWindow()
+ui.setupUi(MainWindow)
+MainWindow.show()
+sys.exit(app.exec_())
 #endregion
