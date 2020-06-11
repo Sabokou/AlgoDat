@@ -322,12 +322,13 @@ class Ui_MainWindow(object):
         
         self.radioButton.setChecked(True)
         
-        if self.radioButton.isChecked() == True:
-            self.widget1 = Canvas2D(self.splitter, width=8, height=4)
-            self.widget1.setObjectName("widget1")
-        else:
-            self.widget2 = Canvas3D(self.splitter, width=8, height=4)
-            self.widget2.setObjectName("widget2")
+        """ HIER DIE FUNKTION FÜR DEN LEEREN GRAPHEN"""
+        # if self.radioButton.isChecked() == True:
+        #     self.widget1 = Canvas2D(self.splitter, width=8, height=4)
+        #     self.widget1.setObjectName("widget1")
+        # else:
+        #     self.widget2 = Canvas3D(self.splitter, width=8, height=4)
+        #     self.widget2.setObjectName("widget2")
         
         self.horizontalLayout.addWidget(self.splitter)
         self.horizontalLayout_3.addLayout(self.horizontalLayout)
