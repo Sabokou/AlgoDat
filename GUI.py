@@ -126,89 +126,10 @@ def ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl = 8):
     return verbindungsliste
 #endregion
 
-#region Connectpoints
-## Definition der Hilfsfunktion connectpoint für die Funktion ShowPlot
-### Zeichnet die Kanten zwischen den einzelnen Knoten
-def connectpoints2D(x,y,p1,p2):
-    x1, x2 = x[p1], x[p2]
-    y1, y2 = y[p1], y[p2]
-    plt.plot([x1,x2],[y1,y2],':ko')
-def connectpoints3D(x,y,z,p1,p2):
-    x1, x2 = x[p1], x[p2]
-    y1, y2 = y[p1], y[p2]
-    z1, z2 = z[p1], z[p2]
-    ax.plot([x1,x2],[y1,y2],[z1, z2], ':ko')
-#endregion
-
-#region Plot-Funktionen
-## Definition der Funktion ShowPlot
-### nutzt die Hilfsfunktion connectpoints
-### zeichnet den kompletten Graphen
-def ShowPlot2D(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
-    xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
-    yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
-
-    for i in verbindungsliste.keys():
-        for n in range(len(verbindungsliste[i])):
-            connectpoints2D(xCoord, yCoord, i, verbindungsliste[i][n][0])
-
-    plt.axis([-1, knotenzahl * 5 + 1, -1, knotenzahl * 5 + 1])
-
-    for i in range(knotenzahl):
-        plt.text(xCoord[i]-0.8, yCoord[i], str(i))
-
-    plt.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg], '-r')
-
-    plt.show()
-
-def ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
-    xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
-    yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
-    zCoord=[koordinatenliste[k][2] for k in sorted(koordinatenliste)]
-
-    for i in verbindungsliste.keys():
-        for n in range(len(verbindungsliste[i])):
-            connectpoints3D(xCoord, yCoord, zCoord, i, verbindungsliste[i][n][0])
-
-    for i in range(knotenzahl):
-        ax.text(xCoord[i]-0.8, yCoord[i], zCoord[i], str(i))
-
-    ax.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg],[koordinatenliste[n][2] for n in weg], '-r')
-
-    plt.show()    
-#endregion
-
-#region Hilfsfunktionen
-# Funktionsaufrufe
-def Funktionsaufruf2D():
-    koordinatenliste = ErstelleKoordiantenliste2D()
-    verbindungsliste = ErstelleVerbindungsliste2D(koordinatenliste)
-    knotenzahl = 8
-    startkoordinate = randint(0,knotenzahl)
-    endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
-
-    weg, distanz = dijkstra(verbindungsliste,startkoordinate, endkoordinate)
-    print(weg)
-    print ("Distance:",distanz)
-    ShowPlot2D(koordinatenliste, verbindungsliste, weg, knotenzahl=8)
-
-def Funktionsaufruf3D():
-    koordinatenliste = ErstelleKoordinatenliste3D()
-    verbindungsliste = ErstelleVerbindungsliste3D(koordinatenliste)
-    knotenzahl = 8
-    startkoordinate = randint(0,knotenzahl)
-    endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
-
-    weg, distanz = dijkstra(verbindungsliste,startkoordinate, endkoordinate)
-    print(weg)
-    print ("Distance:",distanz)
-    ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl=8) 
-#endregion
-
 #region Plot-Klasse für GUI
 # Integration unseres Plotes in die GUI
 class Canvas2D(FigureCanvas):
-    def __init__(self, parent = None, width = 5, height = 5, dpi = 100):
+    def __init__(self, knotenzahl, parent = None, width = 5, height = 5, dpi = 100):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(1,1,1)
  
@@ -216,11 +137,11 @@ class Canvas2D(FigureCanvas):
         self.setParent(parent)
 
         
-        self.plot2D()
+        self.plot2D(knotenzahl)   #to be removed
         
  
 ## Neudefintion der obrigen ShowPlot - Funktion 
-    def plot2D(self):
+    def plot2D(self, knotenzahl):
         axe = self.figure.add_subplot(111)
 
         koordinatenliste = ErstelleKoordiantenliste2D()
@@ -251,7 +172,7 @@ class Canvas2D(FigureCanvas):
         axe.set_xlabel(xlabel)
 
 class Canvas3D(FigureCanvas):
-    def __init__(self, parent = None, width = 5, height = 5, dpi = 100):
+    def __init__(self, knotenzahl, parent = None, width = 5, height = 5, dpi = 100):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(1,1,1)
  
@@ -259,10 +180,10 @@ class Canvas3D(FigureCanvas):
         self.setParent(parent)
 
         
-        self.plot3D()
+        self.plot3D()    #to be removed
         
  
-    def plot3D(self):
+    def plot3D(self, knotenzahl):
         ax2 = self.figure.add_subplot(111, projection='3d')
 
         koordinatenliste = ErstelleKoordinatenliste3D()
@@ -421,6 +342,13 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+    def button_clicked(self):
+        if self.radioButton.isChecked() == True:
+            self.widget1 = Canvas2D(self.splitter, width=8, height=4)
+            self.widget1.setObjectName("widget1")
+        else:
+            self.widget2 = Canvas3D(self.splitter, width=8, height=4)
+            self.widget2.setObjectName("widget2")
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
