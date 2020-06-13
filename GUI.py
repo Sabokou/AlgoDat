@@ -84,7 +84,7 @@ def ErstelleKoordiantenliste2D(knotenzahl = 8):
     for i in range(knotenzahl):
         # Da der Schlüssel der Index ist wird jedes mal 2 zufällige Ganzzahlen generiert und als Tupel dem Schlüssel zugewiesen
         koordinatenliste[i] = [randint(1, 5*knotenzahl), randint(1, 5*knotenzahl)]
-    #print(koordinatenliste)
+    print(koordinatenliste)
     return koordinatenliste
 
 def ErstelleKoordinatenliste3D(knotenzahl = 8):
@@ -180,7 +180,7 @@ class Canvas2D(FigureCanvas):
         self.setParent(parent)
 
         
-        self.plot2D(knotenzahl)   #to be removed
+        self.plot2D(knotenzahl)
         
  
 ## Neudefintion der obrigen ShowPlot - Funktion 
@@ -413,19 +413,19 @@ class Ui_MainWindow(object):
         
         # Löschung vorher erstellten Widgets
         self.deletePriorWidgets()
-        
+        # Exception Handling für den Fall, dass der Nutzer keine Zahl eingibt
+        try:
+            knoten = int(self.lineEdit.text())
+        except:
+            knoten = 8
+
+        print(f"Anzahl Knoten: {knoten}")
+
         if self.radioButton.isChecked() == True:
-            # Exception Handling für den Fall, dass der Nutzer keine Zahl eingibt
-            try:
-                self.widget1 = Canvas2D(self.splitter, width = 8, height = 4, knotenzahl = int(self.lineEdit.text()))
-            except:
-                self.widget1 = Canvas2D(self.splitter, width = 8, height = 4, knotenzahl = 8)
+            self.widget1 = Canvas2D(self.splitter, width = 8, height = 4, knotenzahl = knoten)
             self.widget1.setObjectName("widget1")
         else:
-            try:
-                self.widget2 = Canvas3D(self.splitter, width = 8, height = 4, knotenzahl = int(self.lineEdit.text()))
-            except:
-                 self.widget2 = Canvas3D(self.splitter, width = 8, height = 4, knotenzahl = 8)
+            self.widget2 = Canvas3D(self.splitter, width = 8, height = 4, knotenzahl = knoten)
             self.widget2.setObjectName("widget2")
 
     def retranslateUi(self, MainWindow):
