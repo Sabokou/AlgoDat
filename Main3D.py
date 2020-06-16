@@ -38,14 +38,14 @@ def Pythagoras3D(Punkt1, Punkt2):
     else:
         return distanz
 
-def ErstelleKoordinatenliste3D(knotenzahl):
+def ErstelleKoordinatenliste3D(knotenzahl=8):
     koordinatenliste = dict()
     for i in range(knotenzahl):
         koordinatenliste[i] = [randint(1, 5*knotenzahl), randint(1, 5*knotenzahl), randint(1, 5*knotenzahl)]
     print(koordinatenliste)
     return koordinatenliste
 
-def ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl):
+def ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl=8):
     verbindungsliste = dict()
     for i in koordinatenliste.keys():
         verbindungsliste[i] = list()
@@ -70,7 +70,7 @@ def connectpoints3D(x,y,z,p1,p2):
     z1, z2 = z[p1], z[p2]
     ax.plot([x1,x2],[y1,y2],[z1, z2], ':ko')
 
-def ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl):
+def ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl=8):
     xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
     yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
     zCoord=[koordinatenliste[k][2] for k in sorted(koordinatenliste)]
@@ -91,7 +91,7 @@ def ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl):
 if __name__ == "__main__":
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    knotenzahl = 6
+    knotenzahl = 12
     koordinatenliste = ErstelleKoordinatenliste3D(knotenzahl)
     verbindungsliste = ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl)
     startkoordinate = randint(0,knotenzahl)

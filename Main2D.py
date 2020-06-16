@@ -37,14 +37,14 @@ def Pythagoras2D(Punkt1, Punkt2):
     else:
         return distanz
 
-def ErstelleKoordiantenliste2D(knotenzahl):
+def ErstelleKoordiantenliste2D(knotenzahl=8):
     koordinatenliste = dict()
     for i in range(knotenzahl):
         koordinatenliste[i] = [randint(1, 5*knotenzahl), randint(1, 5*knotenzahl)]
     print(koordinatenliste)
     return koordinatenliste
 
-def ErstelleVerbindungsliste2D(koordinatenliste, knotenzahl):
+def ErstelleVerbindungsliste2D(koordinatenliste, knotenzahl=8):
     verbindungsliste = dict()
     for i in koordinatenliste.keys():
         verbindungsliste[i] = list()
@@ -86,7 +86,7 @@ def ShowPlot2D(koordinatenliste, verbindungsliste, weg, knotenzahl):
     plt.show()
     
 if __name__ == "__main__":
-    knotenzahl = 6
+    knotenzahl = 12
     koordinatenliste = ErstelleKoordiantenliste2D(knotenzahl)
     verbindungsliste = ErstelleVerbindungsliste2D(koordinatenliste, knotenzahl)
     startkoordinate = randint(0,knotenzahl)
