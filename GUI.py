@@ -188,7 +188,7 @@ class Canvas2D(FigureCanvas):
         axe = self.figure.add_subplot(111)
 
         koordinatenliste = ErstelleKoordiantenliste2D(knotenzahl)
-        verbindungsliste = ErstelleVerbindungsliste2D(koordinatenliste)
+        verbindungsliste = ErstelleVerbindungsliste2D(koordinatenliste, knotenzahl = knotenzahl)
         startkoordinate = randint(0,knotenzahl)
         endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
 
@@ -230,7 +230,7 @@ class Canvas3D(FigureCanvas):
         ax2 = self.figure.add_subplot(111, projection='3d')
 
         koordinatenliste = ErstelleKoordinatenliste3D(knotenzahl)
-        verbindungsliste = ErstelleVerbindungsliste3D(koordinatenliste)
+        verbindungsliste = ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl = knotenzahl)
         startkoordinate = randint(0,knotenzahl)
         endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
 
@@ -420,7 +420,7 @@ class Ui_MainWindow(object):
             knoten = 8
 
         print(f"Anzahl Knoten: {knoten}")
-
+        
         if self.radioButton.isChecked() == True:
             self.widget1 = Canvas2D(self.splitter, width = 8, height = 4, knotenzahl = knoten)
             self.widget1.setObjectName("widget1")
