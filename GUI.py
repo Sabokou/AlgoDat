@@ -20,7 +20,7 @@ import numpy as np
 
 #Nötige Funktionen für Dijkstra Algorithmus definieren
 #region Dijkstra-Algorithmus
-## Definition des reinen Dijkstra Algorithmus
+## Definition des reinen Dijkstra Algorithmus, der sich an dem Pseudocode orientiert
 def dijkstra(verbindungsliste,start,ende):
     distanz = dict()
     herkunftsliste = dict()
@@ -51,7 +51,7 @@ def dijkstra(verbindungsliste,start,ende):
 
 #region Berechnung der Kantenlängen
 ## Definition der Hilfsfunktion Pythagoras -> diese errechnet die Distanz zwischen 2 Knotenpunkten
-###Die Funktion wird in der Funktion ErstelleVerbindgungsliste genutzt
+### Pythagoras2D berechnet die Distanz zwischen den Knoten innerhalb eines zweidimensionalen Koordinatensystem
 def Pythagoras2D(Punkt1, Punkt2):
     """
         Nutzt die euklidische Norm auf zweidimensionalen Ortsvektoren der jeweiligen Punkte im die Distanz zwischen ihnen zu bestimmen
@@ -63,6 +63,7 @@ def Pythagoras2D(Punkt1, Punkt2):
     else:
         return distanz
 
+### Pythagoras3D berechnet die Distanz zwischen den Knoten innerhalb eines dreidimensionalen Koordinatensystem
 def Pythagoras3D(Punkt1, Punkt2):
     """
         Nutzt die euklidische Norm auf dreidimensionale Ortsvektoren der jeweiligen Punkte im die Distanz zwischen ihnen zu bestimmen
@@ -76,7 +77,7 @@ def Pythagoras3D(Punkt1, Punkt2):
 #endregion
 
 #region Erstellung der Koordinaten
-## Definition der Funktion ErstelleKoordinatenliste -> erstellt eine Koordinatenliste mit zufälligen Knotenkoordinaten
+## Definition der Funktion ErstelleKoordinatenliste2D -> erstellt eine Koordinatenliste mit zufälligen Knotenkoordinaten im zweidimensionalen Raum
 def ErstelleKoordiantenliste2D(knotenzahl = 8):
     # Die Koordianten werden in einem Dictionary gespeichert mit der Indexzahl als Schlüssel und den Koordianten als Tupel
     koordinatenliste = dict()
@@ -86,11 +87,11 @@ def ErstelleKoordiantenliste2D(knotenzahl = 8):
         koordinatenliste[i] = [randint(1, 5*knotenzahl), randint(1, 5*knotenzahl)]
     print(koordinatenliste)
     return koordinatenliste
-
+## Definition der Funktion ErstelleKoordinatenliste3D -> erstellt eine Koordinatenliste mit zufälligen Knotenkoordinaten im dreidimensionalen Raum
 def ErstelleKoordinatenliste3D(knotenzahl = 8):
     koordinatenliste = dict()
     for i in range(knotenzahl):
-        # Da der Schlüssel der Index ist wird jedes mal 3 zufällige Ganzzahlen generiert, die die x1-, x2- & x3-Werte bilden und als Tupel dem Schlüssel zugewiesen
+        # Da der Schlüssel der Index ist werden jedes mal 3 zufällige Ganzzahlen generiert, die die x1-, x2- & x3-Werte bilden und als Tupel dem Schlüssel zugewiesen werden
         koordinatenliste[i] = [randint(1, 5*knotenzahl), randint(1, 5*knotenzahl), randint(1, 5*knotenzahl)]
     print(koordinatenliste)
     return koordinatenliste
@@ -100,6 +101,7 @@ def ErstelleKoordinatenliste3D(knotenzahl = 8):
 ## Definition der Funktion ErstelleVerbindungsliste 
 ### nutzt die erstellte Koordinatenliste, um die entsprechenden Kanten zwischen den Knoten zufällig zu generieren
 ### ruft dabei die oben definierte Hilfsfunktion Pythagoras auf 
+#### ErstelleVerbindungsliste2D generiert die Kanten für den zweidimensionalen Raum
 def ErstelleVerbindungsliste2D(koordinatenliste, knotenzahl = 8):
     """
         Initialisiert ein Dictionary mit sämtlichen Keys aus der Koordinatenliste und weißt ihnen eine Liste zu mit allen zufällig gewählten Verbindungen
@@ -130,6 +132,8 @@ def ErstelleVerbindungsliste2D(koordinatenliste, knotenzahl = 8):
     print(verbindungsliste)
     return verbindungsliste
 
+
+#### ErstelleVerbindungsliste3D generiert die Kanten für den dreidimensionalen Raum
 def ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl = 8):
     verbindungsliste = dict()
     for i in koordinatenliste.keys():
@@ -152,60 +156,73 @@ def ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl = 8):
 
 #region Plot-Klasse für GUI
 # Integration unseres Plotes in die GUI
+## Insgesamt existieren drei Klassen von Plots, die in die GUI integriert werden können: 
+##  ein leerer Anfangsplot, ein befüllter zweidimensionaler Plot und ein befüllter dreidimensionaler Plot
 
+###Definition des leeren Anfangsplot
+####Alle Plots erben von FigureCanvas
 class CanvasLeer(FigureCanvas):
     def __init__(self, parent = None, width = 5, height = 5, dpi = 100):
+        #Definition der Figurart - hier zweidimensionaler Plot ohne Inputs
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(1,1,1)
- 
+
+        #Aufruf der FigureCanvas-Oberklasse
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)
 
-        
-        self.plotLeer()   #to be removed
-        
- 
-## Neudefintion der obrigen ShowPlot - Funktion 
-    def plotLeer(self):
-        ax = self.figure.add_subplot(111)
-        ax.plot()
 
-
+###Definition des befüllten zweidimensionalen Plots
 class Canvas2D(FigureCanvas):
+    #Initialisierung des 2D-Plots
     def __init__(self, parent = None, width = 5, height = 5, dpi = 100, knotenzahl=8):
+        #Definition der Figurart - hier zweidimensionaler Plots -> Inputs folgen
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(1,1,1)
- 
+
+        #Aufruf der FigureCanvas-Oberklasse
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)
 
-        
+        #Aufruf der folgenden plot2D-Funktionen -> diese integriert die Knoten-, Kanten- und Weginputs in den bisher leeren zweidimensionalen Plots 
         self.plot2D(knotenzahl)
         
- 
-## Neudefintion der obrigen ShowPlot - Funktion 
+    #Definition der plot2D-Funktion ->ruft die oben definierten Dijkstra-Funktionen für den zweidimensionalen Raum auf
+    #   ->Die Knoten, Kanten und der kürzeste Weg, die durch die Dijkstra-Funktionen generiert wurden, werden in den zweidimensionalen Plot integriert
     def plot2D(self, knotenzahl):
+        # Definition als zweidimensionaler Subplot
         axe = self.figure.add_subplot(111)
 
+        #Aufruf der Dijkstra Funktionen ->Knoten und Koordinaten werden generiert
         koordinatenliste = ErstelleKoordiantenliste2D(knotenzahl)
         verbindungsliste = ErstelleVerbindungsliste2D(koordinatenliste, knotenzahl = knotenzahl)
         startkoordinate = randint(0,knotenzahl)
         endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
 
+        #Der kürzeste Weg wird berechnet
         weg, distanz = dijkstra(verbindungsliste,startkoordinate, endkoordinate)
         print(f"\nWeg: {weg}")
         print (f"Distanz: {distanz}")
 
+        #Vorbereitung der x- und y-Koordinatenlisten, die geploted werden sollen
         xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
         yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
-
+        
+        #Iteration über die Verbindungliste, um alle zusammengehörigen Kanten und Knotten zu plotten
+        ##Betrachtung jedes einzelnen Keys in der Verbindungliste
         for i in verbindungsliste.keys():
+            #Iteration über die mit dem Key verbundenen Knoten
             for n in range(len(verbindungsliste[i])):
+                #Definition der x- und y-Koordinaten des Keys und seinem verbundenen Knoten
                 x1, x2 = xCoord[i], xCoord[verbindungsliste[i][n][0]]
                 y1, y2 = yCoord[i], yCoord[verbindungsliste[i][n][0]]
+                #Knoten und Kanten des Keys mit seinem Nachbar werden hier geplottet
                 axe.plot([x1,x2],[y1,y2],':ko')
+
+        #Hier wird der letztendliche kürzeste Weg aus dem Dijkstra-Algorithmus mit rot gezeichnet
         axe.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg], '-r')
 
+        #Beschriftung aller Knoten
         for i in range(knotenzahl):
             axe.text(xCoord[i]-0.5, yCoord[i], str(i))
         
@@ -214,49 +231,66 @@ class Canvas2D(FigureCanvas):
         # Der Titel wird genutzt um Informationen über die Berechnung des Dijkstra-Algorithmus anzuzeigen
         axe.set_title("Dijkstra\n" + xlabel)
 
+###Definition des befüllten dreidimensionalen Plots
 class Canvas3D(FigureCanvas):
+    #Initialisierung des 3D-Plots
     def __init__(self, parent = None, width = 5, height = 5, dpi = 100, knotenzahl=8):
+        #Definition der Figurart - hier dreidimensionaler Plots -> Inputs folgen
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(1,1,1)
- 
+
+        #Aufruf der FigureCanvas-Oberklasse
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)
 
-        
+        #Aufruf der folgenden plot3D-Funktionen -> diese integriert die Knoten-, Kanten- und Weginputs in den bisher leeren dreidimensionalen Plots 
         self.plot3D(knotenzahl)    #to be removed
         
- 
+ #Definition der plot3D-Funktion ->ruft die oben definierten Dijkstra-Funktionen für den dreidimensionalen Raum auf
+    #   ->Die Knoten, Kanten und der kürzeste Weg, die durch die Dijkstra-Funktionen generiert wurden, werden in den dreidimensionalen Plot integriert
     def plot3D(self, knotenzahl):
+        # Definition als dreidimensionaler Subplot
         ax2 = self.figure.add_subplot(111, projection='3d')
 
+        #Aufruf der Dijkstra Funktionen ->Knoten und Koordinaten werden generiert
         koordinatenliste = ErstelleKoordinatenliste3D(knotenzahl)
         verbindungsliste = ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl = knotenzahl)
         startkoordinate = randint(0,knotenzahl)
         endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
 
+        #Der kürzeste Weg wird berechnet
         weg, distanz = dijkstra(verbindungsliste,startkoordinate, endkoordinate)
         print(f"\nWeg: {weg}")
         print (f"Distanz: {distanz}")
 
+        #Vorbereitung der x-,y- und z-Koordinatenlisten, die geploted werden sollen
         xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
         yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
         zCoord=[koordinatenliste[k][2] for k in sorted(koordinatenliste)]
 
+        #Iteration über die Verbindungliste, um alle zusammengehörigen Kanten und Knotten zu plotten
+        ##Betrachtung jedes einzelnen Keys in der Verbindungliste
         for i in verbindungsliste.keys():
+            #Iteration über die mit dem Key verbundenen Knoten
             for n in range(len(verbindungsliste[i])):
+                #Definition der x-, y- und z-Koordinaten des Keys und seinem verbundenen Knoten
                 x1, x2 = xCoord[i], xCoord[verbindungsliste[i][n][0]]
                 y1, y2 = yCoord[i], yCoord[verbindungsliste[i][n][0]]
                 z1, z2 = zCoord[i], zCoord[verbindungsliste[i][n][0]]
+                #Knoten und Kanten des Keys mit seinem Nachbar werden hier geplottet
                 ax2.plot([x1,x2],[y1,y2],[z1,z2],':ko')
+
+        #Hier wird der letztendliche kürzeste Weg aus dem Dijkstra-Algorithmus mit rot gezeichnet        
         ax2.plot([koordinatenliste[n][0] for n in weg ],[koordinatenliste[n][1] for n in weg],[koordinatenliste[n][2] for n in weg], '-r')
 
-
+        #Beschriftung aller Knoten
         for i in range(knotenzahl):
             ax2.text(xCoord[i]-0.5, yCoord[i], zCoord[i], str(i))
 
+        # Der String beinhaltet alle relevanten Daten, die für die Laufzeit des Algorithmus wichtig waren
         xlabel = "Startknoten: "+ str(startkoordinate) + ", Endknoten: "+ str(endkoordinate) + ", Weg: "+ str(weg)+ ", Distanz: "+ str(distanz)
+        # Der Titel wird genutzt um Informationen über die Berechnung des Dijkstra-Algorithmus anzuzeigen
         ax2.set_title("Dijkstra\n" + xlabel)
-        #ax2.set_xlabel(xlabel)
 #endregion
 
 #region GUI
@@ -408,7 +442,7 @@ class Ui_MainWindow(object):
     def button_clicked(self):
         """
             Eventhandler für den Button
-            Überprüft, welcher Radiobutton markiert wurde und ruft dem entsprechend die Erstellfunktion für 2- oder 3D Graphen auf 
+            Überprüft, welcher Radiobutton markiert wurde und ruft dem entsprechend die Erstellfunktion für 2D- oder 3D Graphen auf 
         """
         
         # Löschung vorher erstellten Widgets
