@@ -37,14 +37,14 @@ def Pythagoras2D(Punkt1, Punkt2):
     else:
         return distanz
 
-def ErstelleKoordiantenliste2D(knotenzahl = 8):
+def ErstelleKoordiantenliste2D(knotenzahl):
     koordinatenliste = dict()
     for i in range(knotenzahl):
         koordinatenliste[i] = [randint(1, 5*knotenzahl), randint(1, 5*knotenzahl)]
     print(koordinatenliste)
     return koordinatenliste
 
-def ErstelleVerbindungsliste2D(koordinatenliste, knotenzahl = 8):
+def ErstelleVerbindungsliste2D(koordinatenliste, knotenzahl):
     verbindungsliste = dict()
     for i in koordinatenliste.keys():
         verbindungsliste[i] = list()
@@ -68,7 +68,7 @@ def connectpoints2D(x,y,p1,p2):
     y1, y2 = y[p1], y[p2]
     plt.plot([x1,x2],[y1,y2],':ko')
 
-def ShowPlot2D(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
+def ShowPlot2D(koordinatenliste, verbindungsliste, weg, knotenzahl):
     xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
     yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
 
@@ -85,17 +85,17 @@ def ShowPlot2D(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
 
     plt.show()
     
-def Funktionsaufruf2D():
-    koordinatenliste = ErstelleKoordiantenliste2D()
-    verbindungsliste = ErstelleVerbindungsliste2D(koordinatenliste)
-    knotenzahl = 8
+if __name__ == "__main__":
+    knotenzahl = 6
+    koordinatenliste = ErstelleKoordiantenliste2D(knotenzahl)
+    verbindungsliste = ErstelleVerbindungsliste2D(koordinatenliste, knotenzahl)
     startkoordinate = randint(0,knotenzahl)
     endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
 
     weg, distanz = dijkstra(verbindungsliste,startkoordinate, endkoordinate)
     print(weg)
     print ("Distance:",distanz)
-    ShowPlot2D(koordinatenliste, verbindungsliste, weg, knotenzahl=8) 
+    ShowPlot2D(koordinatenliste, verbindungsliste, weg, knotenzahl) 
 
-if __name__ == "__main__":
-    Funktionsaufruf2D()
+
+    

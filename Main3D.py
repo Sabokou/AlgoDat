@@ -38,14 +38,14 @@ def Pythagoras3D(Punkt1, Punkt2):
     else:
         return distanz
 
-def ErstelleKoordinatenliste3D(knotenzahl = 8):
+def ErstelleKoordinatenliste3D(knotenzahl):
     koordinatenliste = dict()
     for i in range(knotenzahl):
         koordinatenliste[i] = [randint(1, 5*knotenzahl), randint(1, 5*knotenzahl), randint(1, 5*knotenzahl)]
     print(koordinatenliste)
     return koordinatenliste
 
-def ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl = 8):
+def ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl):
     verbindungsliste = dict()
     for i in koordinatenliste.keys():
         verbindungsliste[i] = list()
@@ -70,7 +70,7 @@ def connectpoints3D(x,y,z,p1,p2):
     z1, z2 = z[p1], z[p2]
     ax.plot([x1,x2],[y1,y2],[z1, z2], ':ko')
 
-def ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
+def ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl):
     xCoord=[koordinatenliste[k][0] for k in sorted(koordinatenliste)]
     yCoord=[koordinatenliste[k][1] for k in sorted(koordinatenliste)]
     zCoord=[koordinatenliste[k][2] for k in sorted(koordinatenliste)]
@@ -86,19 +86,18 @@ def ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl = 8):
 
     plt.show()
     
-def Funktionsaufruf3D():
-    koordinatenliste = ErstelleKoordinatenliste3D()
-    verbindungsliste = ErstelleVerbindungsliste3D(koordinatenliste)
-    knotenzahl = 8
+
+
+if __name__ == "__main__":
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    knotenzahl = 6
+    koordinatenliste = ErstelleKoordinatenliste3D(knotenzahl)
+    verbindungsliste = ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl)
     startkoordinate = randint(0,knotenzahl)
     endkoordinate = choice([n for n in range(knotenzahl) if (n !=  startkoordinate)])
 
     weg, distanz = dijkstra(verbindungsliste,startkoordinate, endkoordinate)
     print(weg)
     print ("Distance:",distanz)
-    ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl=8) 
-
-if __name__ == "__main__":
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    Funktionsaufruf3D()
+    ShowPlot3D(koordinatenliste, verbindungsliste, weg, knotenzahl) 
