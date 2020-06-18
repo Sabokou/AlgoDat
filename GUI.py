@@ -224,7 +224,7 @@ class Canvas2D(FigureCanvas):
 
         #Beschriftung aller Knoten
         for i in range(knotenzahl):
-            axe.text(xCoord[i]-0.5, yCoord[i], str(i))
+            axe.text(xCoord[i]-1, yCoord[i], str(i))
         
         # Der String beinhaltet alle relevanten Daten, die für die Laufzeit des Algorithmus wichtig waren
         xlabel = "Startknoten: "+ str(startkoordinate) + ", Endknoten: "+ str(endkoordinate) + ", Weg: "+ str(weg)+ ", Distanz: "+ str(distanz)
@@ -244,7 +244,7 @@ class Canvas3D(FigureCanvas):
         self.setParent(parent)
 
         #Aufruf der folgenden plot3D-Funktionen -> diese integriert die Knoten-, Kanten- und Weginputs in den bisher leeren dreidimensionalen Plots 
-        self.plot3D(knotenzahl)    #to be removed
+        self.plot3D(knotenzahl)
         
  #Definition der plot3D-Funktion ->ruft die oben definierten Dijkstra-Funktionen für den dreidimensionalen Raum auf
     #   ->Die Knoten, Kanten und der kürzeste Weg, die durch die Dijkstra-Funktionen generiert wurden, werden in den dreidimensionalen Plot integriert
@@ -285,7 +285,7 @@ class Canvas3D(FigureCanvas):
 
         #Beschriftung aller Knoten
         for i in range(knotenzahl):
-            ax2.text(xCoord[i]-0.5, yCoord[i], zCoord[i], str(i))
+            ax2.text(xCoord[i]-1, yCoord[i]+1, zCoord[i]+0.5, str(i))
 
         # Der String beinhaltet alle relevanten Daten, die für die Laufzeit des Algorithmus wichtig waren
         xlabel = "Startknoten: "+ str(startkoordinate) + ", Endknoten: "+ str(endkoordinate) + ", Weg: "+ str(weg)+ ", Distanz: "+ str(distanz)
