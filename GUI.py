@@ -1,3 +1,8 @@
+"""
+Autoren:    Alina Buss      (4163246)
+            Phillip Lange   (5920414)
+"""
+
 #region Imports
 # Imports für die Grundfunktionen des Dijkstra Algorithmus
 import matplotlib.pyplot as plt
@@ -85,15 +90,16 @@ def ErstelleKoordiantenliste2D(knotenzahl = 8):
     for i in range(knotenzahl):
         # Da der Schlüssel der Index ist wird jedes mal 2 zufällige Ganzzahlen generiert und als Tupel dem Schlüssel zugewiesen
         koordinatenliste[i] = [randint(1, 5*knotenzahl), randint(1, 5*knotenzahl)]
-    print(koordinatenliste)
+    print(f"Koordinatenliste: {koordinatenliste}\n")
     return koordinatenliste
+
 ## Definition der Funktion ErstelleKoordinatenliste3D -> erstellt eine Koordinatenliste mit zufälligen Knotenkoordinaten im dreidimensionalen Raum
 def ErstelleKoordinatenliste3D(knotenzahl = 8):
     koordinatenliste = dict()
     for i in range(knotenzahl):
         # Da der Schlüssel der Index ist werden jedes mal 3 zufällige Ganzzahlen generiert, die die x1-, x2- & x3-Werte bilden und als Tupel dem Schlüssel zugewiesen werden
         koordinatenliste[i] = [randint(1, 5*knotenzahl), randint(1, 5*knotenzahl), randint(1, 5*knotenzahl)]
-    print(koordinatenliste)
+    print(f"Koordinatenliste: {koordinatenliste}\n")
     return koordinatenliste
 #endregion
 
@@ -129,7 +135,7 @@ def ErstelleVerbindungsliste2D(koordinatenliste, knotenzahl = 8):
             distanz = Pythagoras2D(koordinatenliste[i], koordinatenliste[verbindung])
             verbindungsliste[i] = verbindungsliste[i] + [(verbindung, distanz)]
             verbindungsliste[verbindung] = verbindungsliste[verbindung] + [(i, distanz)]
-    print(verbindungsliste)
+    print("Verbindungen:", verbindungsliste)
     return verbindungsliste
 
 
@@ -150,7 +156,7 @@ def ErstelleVerbindungsliste3D(koordinatenliste, knotenzahl = 8):
             distanz = Pythagoras3D(koordinatenliste[i], koordinatenliste[verbindung])
             verbindungsliste[i] = verbindungsliste[i] + [(verbindung, distanz)]
             verbindungsliste[verbindung] = verbindungsliste[verbindung] + [(i, distanz)]
-    print(verbindungsliste)
+    print("Verbindungen:", verbindungsliste)
     return verbindungsliste
 #endregion
 
